@@ -20,6 +20,7 @@ http://localhost:8080/
 ```
 # ローカル環境を最新にする
 $ git checkout develop
+$ git pull origin develop
 $ git fetch
 
 # ブランチを切り替える
