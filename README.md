@@ -20,7 +20,12 @@ http://localhost:8080/
 ```
 # ローカル環境を最新にする
 $ git checkout develop
+$ git pull origin develop
 $ git fetch
+
+# .envファイルを用意する
+# .env.sampleを複製して名前を.envに変更する
+# Discordで共有している内容に書き換える
 
 # ブランチを切り替える
 # ブランチ名はそのブランチの内容が分かるように
