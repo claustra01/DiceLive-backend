@@ -13,10 +13,10 @@ export class UsersController {
     @Body() userData: {
       email: string,
       password: string,
-      verify: boolean
+      verified: boolean
     },
   ): Promise<User> {
-    userData.verify = true
+    userData.verified = true
     return this.usersService.createUser(userData);
   }
 
