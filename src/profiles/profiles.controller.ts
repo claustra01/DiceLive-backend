@@ -25,9 +25,10 @@ import { JwtPayload } from 'src/auth/jwt.strategy';
   @UseGuards(AuthGuard('jwt'))
   @Put()
   async updateProfile(
+    @Request() req: { user: JwtPayload },
     @Body() profileData: { id: string, name: string, misc?: string }
   ): Promise<Profile> {
-    return this.ProfilesService.updateProfile(profileData)
+    return this.ProfilesService.updateProfile(req.user.id, profileData)
   }
 
 }
