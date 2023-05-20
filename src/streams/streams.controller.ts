@@ -1,11 +1,9 @@
-import { 
-    Controller,
-    Post,
-    Body,
- } from '@nestjs/common';
- import { StreamsService } from './streams.service';
- import { Stream } from '@prisma/client';
- import { UsersService } from 'src/users/users.service';
+import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { StreamsService } from './streams.service';
+import { Stream, User } from '@prisma/client';
+import { UsersService } from 'src/users/users.service';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtPayload } from 'src/auth/jwt.strategy';
 
 @Controller('streams')
 export class StreamsController {
@@ -14,12 +12,17 @@ export class StreamsController {
         private readonly usersService: UsersService
     ) {}
 
+    // @UseGuardsっていうやつを使ってPOSTの前に認証
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async createStream(
-        @Body() streamData: { ownerId: string, url: string, misc?: string},
+        // 認証に成功したらそのログイン中のアカウントのIDを取得
+        @Request() req: { user: JwtPayload },
+        // OwnerIDは認証から取得できるので受け取る必要がない
+        // titleパラメータを追加しました
+        @Body() streamData: { url: string, title: string, misc?: string },
     ): Promise<Stream> {
-        console.log(streamData)
-        // this.usersService.getUser(streamData.ownerId)
-        return await this.streamsService.createStream({  url:streamData.url, misc:streamData.misc,owner: {connect:{id:streamData.ownerId}} });
+        // ここにもtitleを追加
+        return await this.streamsService.createStream({ url: streamData.url, title: streamData.title, misc:streamData.misc, owner: {connect:{id: req.user.id}} });
     }
 }
