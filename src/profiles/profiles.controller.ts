@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Put } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { Profile } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,6 +21,15 @@ import { JwtPayload } from 'src/auth/jwt.strategy';
   ): Promise<Profile> {
     return this.ProfilesService.createProfile( {user:{connect:{id: req.user.id}}, name: profileData.name, misc: profileData.misc ?? '' })
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put()
+  async updateProfile(
+    @Body() profileData: { id: string, name: string, misc?: string }
+  ): Promise<Profile> {
+    return this.ProfilesService.updateProfile(profileData)
+  }
+
 }
 
 
