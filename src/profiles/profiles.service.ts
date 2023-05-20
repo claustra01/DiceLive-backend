@@ -6,9 +6,28 @@ import { Profile, Prisma, User } from '@prisma/client';
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
 
+  async getProfile(id: string): Promise<Profile | null> {
+    return this.prisma.profile.findUnique({
+      where: { id }
+    });
+  }
+
   async createProfile(data: Prisma.ProfileCreateInput): Promise<Profile> {
     return this.prisma.profile.create({
       data,
     });
   }
+
+  async updateProfile(profileData: { id: string; name: string; misc?: string; }): Promise<Profile> {
+    const oldProfile = await this.getProfile(profileData.id);
+    if (!oldProfile) {
+      throw new BadRequestException;
+    }
+
+    return this.prisma.profile.update({
+      where: { id: profileData.id },
+      data: { name: profileData.name, misc: profileData.misc }
+    })
+  }
+
 }
