@@ -16,7 +16,7 @@ model User {
   password    String
   profile     Profile?
   streams     Stream[]
-  verify      Boolean
+  verified    Boolean
   verifyToken String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
