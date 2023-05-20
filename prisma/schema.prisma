@@ -9,3 +9,35 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique 
+  password    String
+  profile     Profile?
+  streams     Stream[]
+  verify      Boolean
+  verifyToken String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Profile {
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  name        String
+  misc        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Stream {
+  id          String    @id @default(uuid())
+  owner       User      @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  url         String    @unique
+  misc        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
