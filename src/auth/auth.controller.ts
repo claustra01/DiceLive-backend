@@ -1,6 +1,7 @@
-import { Controller, UseGuards, Post, Get } from '@nestjs/common';
+import { Controller, UseGuards, Post, Get, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -8,8 +9,9 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('/login')
-  login() {
-    return this.authService.sign();
+  login(@Request() req: { user: User }) {
+    console.log(req.user)
+    return this.authService.sign(req.user);
   }
 
   @UseGuards(AuthGuard('jwt'))
