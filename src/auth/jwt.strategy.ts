@@ -1,8 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 const secrets = process.env.JWT_SECRET_KEY
+
+export type JwtPayload = {
+  id: User['id'];
+  email: User['email'];
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,11 +20,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { isAdmin: boolean }) {
-    if (payload.isAdmin === true) {
-      return true;
-    } else {
-      return false;
+  async validate(payload: JwtPayload) {
+    if (!payload.id) {
+      throw new UnauthorizedException();
     }
+    return payload
   }
 }

@@ -2,6 +2,7 @@ import { Controller, UseGuards, Post, Get, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { User } from '@prisma/client';
+import { JwtPayload } from './jwt.strategy';
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +17,8 @@ export class AuthController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/test')
-  status() {
-    return true;
+  test(@Request() req: { user: JwtPayload }) {
+    return req.user;
   }
   
 }

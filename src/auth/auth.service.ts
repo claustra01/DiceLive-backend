@@ -3,11 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
-
-interface JwtPayload  {
-  id: User['id'];
-  email: User['email'];
-}
+import { JwtPayload } from './jwt.strategy';
 
 @Injectable()
 export class AuthService {

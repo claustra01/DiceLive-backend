@@ -9,13 +9,14 @@ import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/prisma.service';
 
 const secrets = process.env.JWT_SECRET_KEY
+const expires = process.env.EXPIRES
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
       secret: secrets,
-      signOptions: { expiresIn: '86400s' },
+      signOptions: { expiresIn: expires },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy, UsersService, PrismaService],
