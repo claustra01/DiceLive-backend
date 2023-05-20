@@ -1,12 +1,8 @@
-import {
-    Controller,
-    Get,
-    Param,
-    Post,
-    Body,
-  } from '@nestjs/common';
-  import { ProfilesService } from './profiles.service';
-  import { Profile } from '@prisma/client';
+import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { ProfilesService } from './profiles.service';
+import { Profile } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtPayload } from 'src/auth/jwt.strategy';
   
   @Controller('profiles')
   export class ProfilesController {
@@ -14,25 +10,18 @@ import {
       private readonly ProfilesService: ProfilesService,
     ) {}
   
-    @Get(':id')
-    async findProfileById(
-    @Param('id') id: string,
-    ): Promise<Profile> {
-      return this.ProfilesService.profile(id);
-    }
-  
-    // @Get()
-    // async profiles(): Promise<Profile[]> {
-    //   return this.ProfilesService.profile();
-    // }
-  
-   @Post()
-   async createProfile(
-    @Body() profileData: { userId: string, name: string, misc?: string }
-   ): Promise<Profile> {
-    return this.ProfilesService.createProfile( {user:{connect:{id:profileData.userId}}, name: profileData.name, misc: profileData.misc ?? '' })
-   }
+  // @UseGuardsっていうやつを使ってPOSTの前に認証
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  async createProfile(
+    // 認証に成功したらそのログイン中のアカウントのIDを取得
+    @Request() req: { user: JwtPayload },
+    // アカウントIDは認証から取得できるので受け取る必要がない
+    @Body() profileData: { name: string, misc?: string }
+  ): Promise<Profile> {
+    return this.ProfilesService.createProfile( {user:{connect:{id: req.user.id}}, name: profileData.name, misc: profileData.misc ?? '' })
   }
+}
 
 
 

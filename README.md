@@ -39,3 +39,6 @@ $ git checkout -b <ブランチ名>
 # 原則として一つのブランチにつき一つの機能
 # 例: loginブランチでログイン機能が完成したらプルリクを出し、ログアウト機能はlogoutブランチに切り替えてブランチを別にする
 ```
+
+## DB初期化
+`npx prisma migrate dev --name init`

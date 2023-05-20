@@ -28,6 +28,7 @@ CREATE TABLE "Stream" (
     "id" TEXT NOT NULL,
     "ownerId" TEXT NOT NULL,
     "url" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "misc" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -40,9 +41,6 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Stream_ownerId_key" ON "Stream"("ownerId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Stream_url_key" ON "Stream"("url");
