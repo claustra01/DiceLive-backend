@@ -8,13 +8,13 @@ import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from 'src/users/users.service';
 import { PrismaService } from 'src/prisma.service';
 
-const JWT_SECRET_KEY = 'aaa'
+const secrets = process.env.JWT_SECRET_KEY
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: JWT_SECRET_KEY,
+      secret: secrets,
       signOptions: { expiresIn: '86400s' },
     }),
   ],
