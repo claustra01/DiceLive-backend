@@ -25,7 +25,7 @@ model User {
 model Profile {
   id          String    @id @default(uuid())
   user        User      @relation(fields: [userId], references: [id])
-  userId      String
+  userId      String    @unique
   name        String
   misc        String?
   createdAt   DateTime  @default(now())
@@ -35,7 +35,7 @@ model Profile {
 model Stream {
   id          String    @id @default(uuid())
   owner       User      @relation(fields: [ownerId], references: [id])
-  ownerId     String
+  ownerId     String    @unique
   url         String    @unique
   misc        String?
   createdAt   DateTime  @default(now())
