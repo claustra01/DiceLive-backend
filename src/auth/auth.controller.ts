@@ -9,6 +9,6 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('/login')
   login() {
-    return true;
+    return this.authService.sign();
   }
 }
