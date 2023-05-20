@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
 import { StreamsService } from './streams.service';
 import { Stream, User } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
@@ -11,6 +11,12 @@ export class StreamsController {
         private readonly streamsService: StreamsService,
         private readonly usersService: UsersService
     ) {}
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get()
+    async getStream(): Promise<Stream[]> {
+        return this.streamsService.getStream();
+    }
 
     // @UseGuardsっていうやつを使ってPOSTの前に認証
     @UseGuards(AuthGuard('jwt'))
