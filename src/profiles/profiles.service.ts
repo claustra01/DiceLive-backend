@@ -18,9 +18,9 @@ export class ProfilesService {
     });
   }
 
-  async updateProfile(profileData: { id: string; name: string; misc?: string; }): Promise<Profile> {
+  async updateProfile(userId: string, profileData: { id: string; name: string; misc?: string; }): Promise<Profile> {
     const oldProfile = await this.getProfile(profileData.id);
-    if (!oldProfile) {
+    if (!oldProfile || oldProfile.userId != userId) {
       throw new BadRequestException;
     }
 
