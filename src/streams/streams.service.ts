@@ -13,7 +13,7 @@ export class StreamsService {
       });
     }
 
-    async getStream (): Promise<Stream[]> {
+    async getStreams (): Promise<Stream[]> {
       return await this.prisma.stream.findMany();
     }
 

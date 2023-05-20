@@ -14,8 +14,8 @@ export class StreamsController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get()
-    async getStream(): Promise<Stream[]> {
-        return this.streamsService.getStream();
+    async getStreams(): Promise<Stream[]> {
+        return await this.streamsService.getStreams();
     }
 
     // @UseGuardsっていうやつを使ってPOSTの前に認証
