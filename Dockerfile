@@ -18,6 +18,6 @@ RUN npm i
 RUN npx prisma generate
 
 COPY . .
-EXPOSE 8001
+EXPOSE 8500
 
 RUN ["npm", "start"]

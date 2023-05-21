@@ -8,4 +8,4 @@ services:
     volumes:
       - ./:/nest/src/app
     ports:
-      - "8001:8001"
+      - "8500:8500"
