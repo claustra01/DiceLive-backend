@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get, Put, Param } from '@nestjs/common';
 import { StreamsService } from './streams.service';
 import { Stream, User } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
@@ -31,4 +31,15 @@ export class StreamsController {
         // ここにもtitleを追加
         return await this.streamsService.createStream({ url: streamData.url, title: streamData.title, misc:streamData.misc, owner: {connect:{id: req.user.id}} });
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Put()
+    async updateStream(
+        @Request() req: { user: JwtPayload },
+        @Body() streamData: { id: string, title: string, misc: string},
+    ): Promise<Stream> {
+       return this.streamsService.updateStream(req.user.id,streamData)
+    }
+    
+    
 }

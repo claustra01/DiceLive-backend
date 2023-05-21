@@ -8,7 +8,7 @@ export class StreamsService {
 
     async getStreamByUrl(url: string): Promise<Stream | null> {
       console.log(url);
-      return this.prisma.stream.findUnique({
+      return await this.prisma.stream.findUnique({
         where: { url }
       });
     }
@@ -28,4 +28,20 @@ export class StreamsService {
         });
     }
 
+    async getStream (id: string): Promise<Stream> {
+      return await this.prisma.stream.findUnique({
+        where: { id }
+      });
+    }
+    
+    async updateStream (ownerId: string, streamData: {id: string; title: string; misc?: string;}): Promise<Stream> {
+      const oldstream = await this.getStream(streamData.id);
+      if (!oldstream || oldstream.ownerId != ownerId) {
+        throw new BadRequestException;
+      }
+      return this.prisma.stream.update({
+       where: { id: streamData.id},
+       data: { title: streamData.title, misc: streamData.misc}
+    }) 
+  }
 }
