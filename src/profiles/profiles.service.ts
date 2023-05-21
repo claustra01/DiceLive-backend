@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Profile, Prisma, User } from '@prisma/client';
+import { stringify } from 'querystring';
 
 @Injectable()
 export class ProfilesService {
@@ -29,5 +30,6 @@ export class ProfilesService {
       data: { name: profileData.name, misc: profileData.misc }
     })
   }
+
 
 }

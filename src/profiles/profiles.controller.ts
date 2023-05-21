@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, Put } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Put, Get, Param, BadRequestException } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { Profile } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,6 +29,18 @@ import { JwtPayload } from 'src/auth/jwt.strategy';
     @Body() profileData: { id: string, name: string, misc?: string }
   ): Promise<Profile> {
     return this.ProfilesService.updateProfile(req.user.id, profileData)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  async getProfile(
+    @Param('id') id: string,
+  ): Promise<Profile> {
+    const profile = await this.ProfilesService.getProfile(id)
+    if (!profile) {
+      throw new BadRequestException
+    }
+    return profile
   }
 
 }
