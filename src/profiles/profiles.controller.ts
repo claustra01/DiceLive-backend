@@ -19,7 +19,7 @@ import { JwtPayload } from 'src/auth/jwt.strategy';
     // アカウントIDは認証から取得できるので受け取る必要がない
     @Body() profileData: { name: string, misc?: string }
   ): Promise<Profile> {
-    return this.ProfilesService.createProfile( {user:{connect:{id: req.user.id}}, name: profileData.name, misc: profileData.misc ?? '' })
+    return await this.ProfilesService.createProfile( {user:{connect:{id: req.user.id}}, name: profileData.name, misc: profileData.misc ?? '' })
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -28,7 +28,7 @@ import { JwtPayload } from 'src/auth/jwt.strategy';
     @Request() req: { user: JwtPayload },
     @Body() profileData: { id: string, name: string, misc?: string }
   ): Promise<Profile> {
-    return this.ProfilesService.updateProfile(req.user.id, profileData)
+    return await this.ProfilesService.updateProfile(req.user.id, profileData)
   }
 
 }

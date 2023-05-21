@@ -1,6 +1,6 @@
-import { Controller, Post, Body, UseGuards, Request, Get, Put, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get, Put, Param, Delete } from '@nestjs/common';
 import { StreamsService } from './streams.service';
-import { Stream, User } from '@prisma/client';
+import { Stream } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtPayload } from 'src/auth/jwt.strategy';
@@ -38,8 +38,15 @@ export class StreamsController {
         @Request() req: { user: JwtPayload },
         @Body() streamData: { id: string, title: string, misc: string},
     ): Promise<Stream> {
-       return this.streamsService.updateStream(req.user.id,streamData)
+       return await this.streamsService.updateStream(req.user.id, streamData)
     }
-    
+
+    @UseGuards(AuthGuard('jwt'))
+    @Delete(':id')
+    async deleteStream(
+        @Param('id') streamId: string,
+    ): Promise<Stream> {
+        return await this.streamsService.deleteStream( streamId )
+    }
     
 }
