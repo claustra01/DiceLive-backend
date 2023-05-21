@@ -39,9 +39,20 @@ export class StreamsService {
       if (!oldstream || oldstream.ownerId != ownerId) {
         throw new BadRequestException;
       }
-      return this.prisma.stream.update({
-       where: { id: streamData.id},
-       data: { title: streamData.title, misc: streamData.misc}
-    }) 
-  }
+      return await this.prisma.stream.update({
+        where: { id: streamData.id },
+        data: { title: streamData.title, misc: streamData.misc}
+      }) 
+    }
+
+    async deleteStream ( streamId: string ): Promise<Stream> {
+      const stream = await this.getStream(streamId);
+      if (!stream) {
+        throw new BadRequestException;
+      }
+      return await this.prisma.stream.delete({
+        where: { id: streamId }
+      })
+    }
+
 }
